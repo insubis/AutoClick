@@ -1,2 +1,4 @@
-tkinter
-pip install keyboard
+pyautogui==0.9.54
+pynput==1.7.6
+keyboard==0.24.0
+mouse==0.7.1
