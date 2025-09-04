@@ -12,8 +12,8 @@ class AutoClicker:
         self.root.geometry("320x360")
         self.root.resizable(False, False)
 
-        self.enabled = False  # Ligado/desligado pelo F6 ou botão
-        self.clicando = False  # Apenas enquanto o botão lateral estiver pressionado
+        self.enabled = False  
+        self.clicando = False 
         self.click_count = 0
         self.start_time = None
 
