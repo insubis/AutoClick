@@ -5,15 +5,18 @@ import time
 import pyautogui
 from pynput import mouse, keyboard
 
+
 class AutoClicker:
-    def __init__(self, root):
+    def __init__(self, root, toggle_key="f6"):
         self.root = root
         self.root.title("Auto Clicker")
         self.root.geometry("320x360")
         self.root.resizable(False, False)
 
-        self.enabled = False  
-        self.clicando = False 
+        # Configuração inicial
+        self.toggle_key = toggle_key.lower()
+        self.enabled = False
+        self.clicando = False
         self.click_count = 0
         self.start_time = None
 
@@ -46,7 +49,8 @@ class AutoClicker:
         self.cps_label.pack(pady=5)
 
         # Info
-        ttk.Label(root, text="Segure o botão lateral do mouse para clicar\nF6 para ligar/desligar", font=("Arial", 9)).pack(pady=10)
+        ttk.Label(root, text=f"Segure o botão lateral do mouse para clicar\n{self.toggle_key.upper()} para ligar/desligar",
+                  font=("Arial", 9)).pack(pady=10)
 
         # Threads
         threading.Thread(target=self.click_loop, daemon=True).start()
@@ -77,11 +81,20 @@ class AutoClicker:
             listener.join()
 
     def keyboard_listener(self):
-        """Monitora F6 para ligar/desligar"""
+        """Monitora a tecla definida para ligar/desligar"""
+
         def on_press(key):
             try:
-                if key == keyboard.Key.f6:
-                    self.toggle_enabled()
+                # Para teclas de letras/números
+                if hasattr(key, "char") and key.char:
+                    if key.char.lower() == self.toggle_key:
+                        self.toggle_enabled()
+
+                # Para teclas especiais (f1, f2, esc, etc.)
+                elif hasattr(key, "name") and key.name:
+                    if key.name.lower() == self.toggle_key:
+                        self.toggle_enabled()
+
             except AttributeError:
                 pass
 
@@ -116,5 +129,5 @@ class AutoClicker:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    AutoClicker(root)
+    AutoClicker(root, toggle_key="f7") 
     root.mainloop()
